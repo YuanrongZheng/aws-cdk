@@ -118,6 +118,51 @@ constructLinter.add({
 });
 
 constructLinter.add({
+  code: 'base-construct-ctor',
+  message: 'signature of all construct constructors should be "scope, id, props"',
+  eval: e => {
+    // only applies to non abstract classes
+    if (e.ctx.classType.abstract) {
+      return;
+    }
+
+    const initializer = e.ctx.initializer;
+    if (!e.assert(initializer, e.ctx.fqn)) {
+      return;
+    }
+
+    if (initializer.parentType.name.startsWith('Cfn')) {
+      // Remove this conditional when cfn2ts is fixed up to not use construct compat layer
+      return;
+    }
+
+    const expectedParams = new Array<MethodSignatureParameterExpectation>();
+
+    expectedParams.push({
+      name: 'scope',
+      type: e.ctx.core.baseConstructClass.fqn,
+    });
+
+    expectedParams.push({
+      name: 'id',
+      type: 'string',
+    });
+
+    // it's okay for a construct not to have a "props" argument so we only
+    // assert the "props" argument if there are more than two parameters
+    if (initializer.parameters.length > 2) {
+      expectedParams.push({
+        name: 'props',
+      });
+    }
+
+    e.assertSignature(initializer, {
+      parameters: expectedParams,
+    });
+  },
+});
+
+constructLinter.add({
   code: 'props-struct-name',
   message: 'all constructs must have a props struct',
   eval: e => {

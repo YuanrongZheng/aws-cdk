@@ -135,7 +135,8 @@
       "props-default-doc:@aws-cdk/aws-s3.NotificationKeyFilter.suffix",
       "docs-public-apis:@aws-cdk/aws-s3.RoutingRuleCondition",
       "docs-public-apis:@aws-cdk/aws-s3.BucketNotificationDestinationType.LAMBDA",
-      "docs-public-apis:@aws-cdk/aws-s3.BucketNotificationDestinationType.QUEUE"
+      "docs-public-apis:@aws-cdk/aws-s3.BucketNotificationDestinationType.QUEUE",
+      "construct-ctor:*"
     ]
   },
   "stability": "stable",
